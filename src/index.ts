@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import productRoute from './routes/product';
+import productRoute from './routes/user';
 import pool from './db';
 import { Pool, PoolClient } from 'pg';
 // const apiRoute = express.Router();
