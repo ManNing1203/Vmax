@@ -1,17 +1,16 @@
 import { Stack } from "expo-router";
-import { useColorScheme } from "react-native";
 import { StatusBar } from "expo-status-bar";
 
-import { Colors } from "../constants/Colors";
+import { ThemeProvider } from "../contexts/ThemeContext";
 import { UserProvider } from "../contexts/UserContext";
+import { useTheme } from "../hooks/useTheme";
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme] ?? Colors.light;
+function RootNavigator() {
+  const { theme, colorScheme } = useTheme();
 
   return (
-    <UserProvider>
-      <StatusBar value="auto" />
+    <>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
       <Stack
         initialRouteName="index"
         screenOptions={{
@@ -27,6 +26,16 @@ export default function RootLayout() {
         {/* Individual Screens */}
         <Stack.Screen name="index" />
       </Stack>
-    </UserProvider>
+    </>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <UserProvider>
+        <RootNavigator />
+      </UserProvider>
+    </ThemeProvider>
   );
 }

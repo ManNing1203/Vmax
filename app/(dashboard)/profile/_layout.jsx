@@ -1,12 +1,11 @@
 import { Stack, useRouter } from "expo-router";
-import { Pressable, useColorScheme } from "react-native";
+import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { Colors } from "../../../constants/Colors";
+import { useTheme } from "../../../hooks/useTheme";
 
 export default function ProfileLayout() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme] ?? Colors.light;
+  const { theme } = useTheme();
 
   return (
     <Stack

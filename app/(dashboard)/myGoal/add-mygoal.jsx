@@ -1,5 +1,6 @@
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, Pressable } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import ThemedView from "../../../components/ThemedView";
 import ThemedScrollView from "../../../components/ThemedScrollView";
@@ -8,47 +9,142 @@ import ThemedTextInput from "../../../components/ThemedTextInput";
 import ThemedCard from "../../../components/ThemedCard";
 import Spacer from "../../../components/Spacer";
 import ThemedButton from "../../../components/ThemedButton";
+import { useTheme } from "../../../hooks/useTheme";
+import { getPrimaryColor } from "../../../constants/Colors";
 
 function addMyGoal(props) {
-  return (
-    <ThemedView safe={true}>
-      <ThemedScrollView contentContainerStyle={styles.content}>
-        <View style={styles.headerContainer}>
-          <ThemedText title={true} style={[styles.header, { marginBottom: 0 }]}>
-            Small steps lead to big changes
-          </ThemedText>
-          <ThemedText title={true} style={styles.header}>
-            Start your journey here!
-          </ThemedText>
-        </View>
+  const { theme, colorScheme } = useTheme();
+  const [date, setDate] = useState(null);
+  const [show, setShow] = useState(false);
+  const primaryColor = getPrimaryColor(colorScheme);
 
-        <ThemedCard style={styles.formCard}>
+  const onChangeTargetDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const formatDate = (dateObj) => {
+    if (!dateObj) return "";
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString("default", { month: "long" });
+    const year = dateObj.getFullYear();
+    return `${day} ${month} ${year}`;
+  };
+
+  return (
+    <ThemedView
+      safe={true}
+      style={[styles.page, { backgroundColor: theme.background }]}
+    >
+      <ThemedScrollView contentContainerStyle={styles.content}>
+        <ThemedCard
+          style={[
+            styles.formCard,
+            {
+              backgroundColor: theme.uiBackground,
+              borderColor: theme.iconColor,
+              shadowColor: theme.iconColorFocused,
+            },
+          ]}
+        >
+          <View style={styles.headerContainer}>
+            <ThemedText
+              title={true}
+              style={[styles.header, { color: theme.text }]}
+            >
+              Small steps lead to big changes
+            </ThemedText>
+            <ThemedText
+              title={true}
+              style={[
+                styles.header,
+                styles.headerAccent,
+                { color: primaryColor },
+              ]}
+            >
+              Start your journey here!
+            </ThemedText>
+          </View>
           <ThemedTextInput
             placeholder="Description for your goal"
-            style={styles.input}
-            multiline
+            multiline={true}
+            numberOfLines={3}
+            style={[
+              styles.input,
+              {
+                backgroundColor: theme.background,
+                borderColor: theme.iconColor,
+                color: theme.text,
+              },
+            ]}
           />
 
           <ThemedTextInput
             placeholder="Target amount"
-            style={styles.input}
+            style={[
+              styles.input,
+              {
+                backgroundColor: theme.background,
+                borderColor: theme.iconColor,
+                color: theme.text,
+              },
+            ]}
             keyboardType="numeric"
           />
 
-          <ThemedTextInput placeholder="Target date" style={styles.input} />
+          <Pressable
+            onPress={() => setShow(true)}
+            style={[
+              styles.input,
+              styles.dateField,
+              {
+                backgroundColor: theme.background,
+                borderColor: show ? primaryColor : theme.iconColor,
+              },
+            ]}
+          >
+            {date ? (
+              <ThemedText style={{ color: theme.text }}>
+                {formatDate(date)}
+              </ThemedText>
+            ) : (
+              <ThemedText
+                style={[styles.placeholder, { color: theme.placeholderText }]}
+              >
+                Target Date
+              </ThemedText>
+            )}
+          </Pressable>
 
-          <ThemedText style={styles.note}>
+          {show && (
+            <DateTimePicker
+              value={date || new Date()}
+              mode="date"
+              display="default"
+              onChange={onChangeTargetDate}
+            />
+          )}
+
+          <ThemedText style={[styles.note, { color: theme.text }]}>
             Our analysis suggests you will get there by 20 May 2026
           </ThemedText>
+
+          <Spacer height={18} />
+          <ThemedButton
+            style={[
+              styles.primaryButton,
+              {
+                backgroundColor: primaryColor,
+                shadowColor: primaryColor,
+              },
+            ]}
+          >
+            <ThemedText title style={styles.primaryButtonText}>
+              Start Journey
+            </ThemedText>
+          </ThemedButton>
         </ThemedCard>
-
-        <Spacer height={18} />
-
-        <ThemedButton style={styles.primaryButton}>
-          <ThemedText title style={styles.primaryButtonText}>
-            Start Journey
-          </ThemedText>
-        </ThemedButton>
       </ThemedScrollView>
     </ThemedView>
   );
@@ -57,54 +153,74 @@ function addMyGoal(props) {
 export default addMyGoal;
 
 const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+  },
   content: {
     paddingHorizontal: 18,
-    paddingTop: 18,
-    paddingBottom: 28,
+    paddingTop: 20,
+    paddingBottom: 36,
   },
   headerContainer: {
     marginBottom: 20,
   },
   header: {
-    fontSize: 16,
-    marginBottom: 8,
+    fontSize: 17,
+    marginBottom: 4,
     textAlign: "center",
+    lineHeight: 24,
+  },
+  headerAccent: {
+    fontSize: 21,
+    letterSpacing: 0.3,
   },
   formCard: {
-    backgroundColor: "#e7e7e7",
-    borderRadius: 16,
+    borderRadius: 24,
     padding: 20,
     gap: 10,
-    shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 5,
+    borderWidth: StyleSheet.hairlineWidth,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 4,
   },
   input: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.08)",
     marginBottom: 0,
     width: "100%",
+    minHeight: 56,
+  },
+  dateField: {
+    justifyContent: "center",
+    paddingVertical: 0,
+  },
+  placeholder: {
+    fontSize: 15,
   },
   note: {
     fontSize: 13,
-    color: "#6b6b6b",
-    marginTop: 6,
+    textAlign: "center",
+    lineHeight: 18,
+    marginTop: 15,
   },
   primaryButton: {
-    borderRadius: 12,
-    paddingVertical: 12,
+    borderRadius: 16,
+    paddingVertical: 15,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    marginTop: 8,
+    marginTop: 12,
+    shadowOpacity: 0.14,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
   },
   primaryButtonText: {
     color: "#fff",
+    fontSize: 16,
+    letterSpacing: 0.35,
   },
 });

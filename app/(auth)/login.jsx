@@ -16,6 +16,7 @@ import ThemedTextInput from "../../components/ThemedTextInput";
 import ThemedLogo from "../../components/ThemedLogo";
 import { Colors } from "../../constants/Colors";
 import { useUser } from "../../hooks/useUser";
+import { useTheme } from "../../hooks/useTheme";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ const Login = () => {
 
   const router = useRouter();
   const { user, login } = useUser();
+  const { theme } = useTheme();
 
   const handleLogin = async () => {
     setError(null);
@@ -52,12 +54,14 @@ const Login = () => {
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
+            style={{ backgroundColor: theme.uiBackground }}
           />
           <ThemedTextInput
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            style={{ backgroundColor: theme.uiBackground }}
           />
           <ThemedButton onPress={handleLogin} style={styles.loginBtn}>
             <ThemedText title={true} style={styles.loginText}>

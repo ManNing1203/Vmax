@@ -1,6 +1,6 @@
-import { useColorScheme, View, StyleSheet } from "react-native";
-import { Colors } from "../constants/Colors";
+import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../hooks/useTheme";
 
 const ThemedView = ({
   style,
@@ -8,8 +8,7 @@ const ThemedView = ({
   safeEdges = ["right", "bottom", "left"],
   ...props
 }) => {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme] ?? Colors.light;
+  const { theme } = useTheme();
 
   const Container = safe ? SafeAreaView : View;
 

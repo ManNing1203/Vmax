@@ -4,18 +4,16 @@ import {
   View,
   Pressable,
   TouchableOpacity,
-  useColorScheme,
   Text,
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { Colors } from "../../../constants/Colors";
 import ThemedModal from "../../../components/ThemedModal";
+import { useTheme } from "../../../hooks/useTheme";
 
 export default function ExpensesLayout() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme] ?? Colors.light;
+  const { theme } = useTheme();
   const router = useRouter();
 
   const [menuVisible, setMenuVisible] = useState(false);

@@ -1,10 +1,18 @@
 import { Pressable, StyleSheet } from "react-native";
-import { Colors } from "../constants/Colors";
+import { useTheme } from "../hooks/useTheme";
+import { getPrimaryColor } from "../constants/Colors";
 
 function ThemedButton({ style, ...props }) {
+  const { colorScheme } = useTheme();
+  const primaryColor = getPrimaryColor(colorScheme);
+
   return (
     <Pressable
-      style={({ pressed }) => [styles.btn, pressed && styles.pressed, style]}
+      style={({ pressed }) => [
+        { ...styles.btn, backgroundColor: primaryColor },
+        pressed && styles.pressed,
+        style,
+      ]}
       {...props}
     />
   );
@@ -12,7 +20,6 @@ function ThemedButton({ style, ...props }) {
 
 const styles = StyleSheet.create({
   btn: {
-    backgroundColor: Colors.primary,
     padding: 18,
     borderRadius: 6,
     marginVertical: 10,

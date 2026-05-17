@@ -1,21 +1,14 @@
 import React, { useState } from "react";
-import {
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  useColorScheme,
-} from "react-native";
+import { Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 
-import { Colors } from "../constants/Colors";
 import ThemedView from "./ThemedView";
 import ThemedText from "./ThemedText";
+import { useTheme } from "../hooks/useTheme";
 
 export default function ImageUpload({ purpose = "receipt" }) {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme] ?? Colors.light;
+  const { theme } = useTheme();
   const [image, setImage] = useState(null);
 
   const handleImageAction = async (type) => {
@@ -73,12 +66,13 @@ export default function ImageUpload({ purpose = "receipt" }) {
     <ThemedView style={[styles.container, { flex: 0 }]}>
       <TouchableOpacity
         style={[
-          {
-            backgroundColor: theme.navBackground,
-            borderColor: theme.iconColor + "40",
-          },
           styles.uploadBox,
-          image && styles.hasImage,
+          image
+            ? styles.hasImage
+            : {
+                backgroundColor: theme.navBackground,
+                borderColor: theme.iconColor + "40",
+              },
         ]}
         onPress={showOptions}
       >
@@ -101,7 +95,7 @@ export default function ImageUpload({ purpose = "receipt" }) {
           onPress={() => setImage(null)}
           style={styles.retakeButton}
         >
-          <Ionicons name="refresh" size={16} color="#FF3B30" />
+          <Ionicons name="refresh" size={16} color="#dc3545" />
           <ThemedText style={styles.removeText}>Retake</ThemedText>
         </TouchableOpacity>
       )}
@@ -144,7 +138,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   removeText: {
-    color: "#FF3B30",
+    color: "#dc3545",
     fontWeight: "600",
     marginLeft: 5,
   },

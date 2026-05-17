@@ -1,15 +1,14 @@
 import { Tabs } from "expo-router";
-import { View, Pressable, useColorScheme } from "react-native";
+import { View, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { usePathname } from "expo-router";
 
-import { Colors } from "../../constants/Colors";
 import UserOnly from "../../components/auth/UserOnly";
 import FloatingChatButton from "../../components/chatbot/FloatingChatButton";
+import { useTheme } from "../../hooks/useTheme";
 
 export default function DashboardLayout() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme] ?? Colors.light;
+  const { theme } = useTheme();
   const pathname = usePathname();
 
   // Show floating button on all dashboard pages except profile

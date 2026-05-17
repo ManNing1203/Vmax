@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 50,
-    fontStyle: "italic",
+    // fontStyle: "italic",
   },
 });

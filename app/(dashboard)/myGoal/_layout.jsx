@@ -1,17 +1,11 @@
 import { Stack, useRouter } from "expo-router";
-import {
-  View,
-  Pressable,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { View, Pressable, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { Colors } from "../../../constants/Colors";
+import { useTheme } from "../../../hooks/useTheme";
 
 export default function MyGoalLayout() {
-  const colorScheme = useColorScheme();
-  const theme = Colors[colorScheme] ?? Colors.light;
+  const { theme } = useTheme();
   const router = useRouter();
 
   return (

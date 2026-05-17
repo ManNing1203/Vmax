@@ -145,7 +145,7 @@ const MyGoalIndex = () => {
               Target Date of Completion: {item.target_date}
             </ThemedText>
             <Spacer height={10} />
-            <ThemedText>
+            <ThemedText title={true}>
               + RM 26.33 ((Daily Income - Expenses)/No. of Active Goals)
             </ThemedText>
           </ThemedCard>

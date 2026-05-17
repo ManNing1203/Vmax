@@ -1,6 +1,9 @@
 export const Colors = {
-  primary: "#6849a7",
-  warning: "#cc475a",
+  primary: {
+    light: "#6849a7",
+    dark: "#8574a4",
+  },
+  warning: "#dc3545",
 
   dark: {
     title: "#fff",
@@ -22,4 +25,8 @@ export const Colors = {
     iconColorFocused: "#000",
     uiBackground: "#d6d5e1",
   },
+};
+
+export const getPrimaryColor = (colorScheme) => {
+  return Colors.primary[colorScheme] || Colors.primary.light;
 };
