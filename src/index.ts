@@ -1,6 +1,12 @@
 import express, { Request, Response } from 'express';
-import productRoute from './routes/user';
+import userRoute from './routes/user';
+import ragRoute from './routes/rag';
+import savingRoute from './routes/saving';
+import expenseRoute from './routes/expence';
+import goalRoute from './routes/goal';
 import pool from './db';
+import session from "express-session";
+import path from "path";
 import { Pool, PoolClient } from 'pg';
 // const apiRoute = express.Router();
 
@@ -8,7 +14,19 @@ const app = express();
 
 const Port = 3000;
 app.use(express.json());
-app.use("/product",productRoute);
+app.use("/users",userRoute);
+app.use("/rag",ragRoute);
+app.use("/saving",savingRoute);
+app.use("/expense",expenseRoute);
+app.use("/goal",goalRoute);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
 
 // app.use("/",async (req,res)=>{
 //     let con:PoolClient|null =null;

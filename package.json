@@ -11,16 +11,29 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.6.0",
     "@types/pg": "^8.20.0",
     "express": "^5.2.1",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "@langchain/core": "^1.1.45",
+    "@langchain/deepseek": "^1.0.25",
+    "@langchain/openai": "^1.4.5",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "langchain": "^1.4.0",
+    "openai": "^6.36.0",
     "pg": "^8.20.0"
   }
 }
