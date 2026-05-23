@@ -30,7 +30,7 @@ export default async function auth(req:any, res:any, next: NextFunction) {
     con = await pool.connect();
     let result = await con.query('SELECT * FROM "users" WHERE user_id = $1', [decoded.userId]);
     const user = result.rows[0];
-    req.user = { userId: user.user_id, email: user.email, totalIncome: user.total_income, totalGoal: user.total_goal ,minimumDailyIncome: user.minimum_daily_income};
+    req.user = { userId: user.user_id, email: user.email, totalIncome: user.total_income, totalGoal: user.total_goal ,minimumDailyIncome: user.minimum_daily_income, monthlyIncome: user.monthly_income};
     console.log("user", req.user);
     next();
 

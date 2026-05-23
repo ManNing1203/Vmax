@@ -37,7 +37,7 @@ route.post('/setMonthlyIncome',auth,async (req:any, res:any)=>{
 
         con = await pool.connect();
         let result = await con.query('UPDATE "users" as u SET monthly_income = $1 WHERE u.user_id = $2', [monthlyIncome, req.user?.userId]);
-        
+        console.log("Monthly income updated successfully", result.rows);
         return res.json({
             success: true
         });
@@ -52,7 +52,22 @@ route.post('/setMonthlyIncome',auth,async (req:any, res:any)=>{
     }
 
 })
+route.get('/getMonthlyIncome',auth,async (req:any, res:any)=>{
+    let con: PoolClient | null = null;
+    try {
+        return res.json({
+            success: true,
+            monthlyIncome: req.user?.monthlyIncome ??0
+        });
+    }
+    catch (err) {
+        console.error("error", err);
+        return res.json({
+            success: false
+        });
+    }
 
+})
 // route.post('/addSavings',auth,async (req:any, res:any)=>{
 //     let con: PoolClient | null = null;
 //     try {
