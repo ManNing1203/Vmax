@@ -8,12 +8,12 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 
-import ThemedView from "../../../components/ThemedView";
-import ThemedText from "../../../components/ThemedText";
-import ThemedTextInput from "../../../components/ThemedTextInput";
-import ThemedButton from "../../../components/ThemedButton";
-import Spacer from "../../../components/Spacer";
-import MessageBubble from "../../../components/chatbot/MessageBubble";
+import ThemedView from "../../components/ThemedView";
+import ThemedText from "../../components/ThemedText";
+import ThemedTextInput from "../../components/ThemedTextInput";
+import ThemedButton from "../../components/ThemedButton";
+import Spacer from "../../components/Spacer";
+import MessageBubble from "../../components/chatbot/MessageBubble";
 
 const ChatbotIndex = () => {
   const [messages, setMessages] = useState([

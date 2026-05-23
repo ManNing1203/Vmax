@@ -16,7 +16,7 @@ import {
   Dimensions,
   Animated,
 } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { useState, useRef, useEffect } from "react";
 import Svg, { Path, Circle, Ellipse, G } from "react-native-svg";
 
@@ -34,19 +34,19 @@ const { width: SCREEN_W, height: SCREEN_H } = Dimensions.get("window");
 
 // ── Design tokens (mirrored from PiggyBankTracker) ──────────────────────────
 const T = {
-  accentGold:     "#F5C842",
+  accentGold: "#F5C842",
   accentGoldDeep: "#C8A800",
-  accentGoldLight:"#FFF3C0",
-  coral:          "#FF7058",
-  teal:           "#40596B",
-  textDark:       "#2C1810",
-  textMid:        "#7A5C3C",
-  textLight:      "#BFA080",
-  bgWarm:         "#FFF8ED",
-  bgBorder:       "#F5DFA0",
-  bgCard:         "#FFFDF7",
-  error:          "#E53935",
-  errorBg:        "#FFF0F0",
+  accentGoldLight: "#FFF3C0",
+  coral: "#FF7058",
+  teal: "#40596B",
+  textDark: "#2C1810",
+  textMid: "#7A5C3C",
+  textLight: "#BFA080",
+  bgWarm: "#FFF8ED",
+  bgBorder: "#F5DFA0",
+  bgCard: "#FFFDF7",
+  error: "#E53935",
+  errorBg: "#FFF0F0",
 };
 
 // ── Mini piggy coin icon ─────────────────────────────────────────────────────
@@ -54,10 +54,20 @@ function CoinIcon({ size = 22 }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 44 44">
       <Circle cx="22" cy="22" r="21" fill={T.accentGold} />
-      <Circle cx="22" cy="22" r="17" fill="none" stroke={T.accentGoldDeep} strokeWidth="2" />
+      <Circle
+        cx="22"
+        cy="22"
+        r="17"
+        fill="none"
+        stroke={T.accentGoldDeep}
+        strokeWidth="2"
+      />
       <Path
         d="M20 12 L20 32 M18 16 Q22 14 25 17 Q27 20 22 22 Q27 22 27 26 Q27 32 20 31"
-        stroke="#8B6914" strokeWidth="2" fill="none" strokeLinecap="round"
+        stroke="#8B6914"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
       />
     </Svg>
   );
@@ -69,18 +79,36 @@ function TopDecoration() {
     <View style={deco.container} pointerEvents="none">
       <Svg width={SCREEN_W} height={220} viewBox={`0 0 ${SCREEN_W} 220`}>
         {/* Large warm circle */}
-        <Circle cx={SCREEN_W * 0.85} cy={-20} r={160}
-          fill={T.accentGold} fillOpacity={0.13} />
+        <Circle
+          cx={SCREEN_W * 0.85}
+          cy={-20}
+          r={160}
+          fill={T.accentGold}
+          fillOpacity={0.13}
+        />
         {/* Smaller accent circle */}
-        <Circle cx={SCREEN_W * 0.1} cy={60} r={70}
-          fill={T.coral} fillOpacity={0.08} />
+        <Circle
+          cx={SCREEN_W * 0.1}
+          cy={60}
+          r={70}
+          fill={T.coral}
+          fillOpacity={0.08}
+        />
         {/* Subtle teal dot */}
-        <Circle cx={SCREEN_W * 0.5} cy={180} r={30}
-          fill={T.teal} fillOpacity={0.06} />
+        <Circle
+          cx={SCREEN_W * 0.5}
+          cy={180}
+          r={30}
+          fill={T.teal}
+          fillOpacity={0.06}
+        />
         {/* Gold arc line */}
         <Path
           d={`M0,100 Q${SCREEN_W * 0.3},60 ${SCREEN_W * 0.7},90 Q${SCREEN_W},110 ${SCREEN_W},70`}
-          stroke={T.accentGold} strokeWidth="1.5" fill="none" strokeOpacity={0.4}
+          stroke={T.accentGold}
+          strokeWidth="1.5"
+          fill="none"
+          strokeOpacity={0.4}
         />
       </Svg>
     </View>
@@ -156,15 +184,23 @@ function PremiumInput({ label, icon, ...props }) {
   return (
     <View style={inp.wrapper}>
       {label && <Text style={inp.label}>{label}</Text>}
-      <Animated.View style={[
-        inp.container,
-        { borderColor, shadowOpacity, shadowColor: T.accentGold },
-      ]}>
+      <Animated.View
+        style={[
+          inp.container,
+          { borderColor, shadowOpacity, shadowColor: T.accentGold },
+        ]}
+      >
         {icon && <View style={inp.iconSlot}>{icon}</View>}
         <ThemedTextInput
           {...props}
-          onFocus={() => { setFocused(true); props.onFocus?.(); }}
-          onBlur={() => { setFocused(false); props.onBlur?.(); }}
+          onFocus={() => {
+            setFocused(true);
+            props.onFocus?.();
+          }}
+          onBlur={() => {
+            setFocused(false);
+            props.onBlur?.();
+          }}
           style={[inp.field, props.style]}
           placeholderTextColor={T.textLight}
         />
@@ -217,9 +253,17 @@ function GoldButton({ onPress, children, loading }) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () =>
-    Animated.spring(scale, { toValue: 0.97, useNativeDriver: true, damping: 10 }).start();
+    Animated.spring(scale, {
+      toValue: 0.97,
+      useNativeDriver: true,
+      damping: 10,
+    }).start();
   const handlePressOut = () =>
-    Animated.spring(scale, { toValue: 1, useNativeDriver: true, damping: 10 }).start();
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+      damping: 10,
+    }).start();
 
   return (
     <Animated.View style={[btn.shadow, { transform: [{ scale }] }]}>
@@ -229,8 +273,9 @@ function GoldButton({ onPress, children, loading }) {
         onPressOut={handlePressOut}
         style={btn.container}
         activeOpacity={0.9}
+        disabled={loading}
       >
-        <Text style={btn.text}>{children}</Text>
+        <Text style={btn.text}>{loading ? "Signing In..." : children}</Text>
       </ThemedButton>
     </Animated.View>
   );
@@ -287,35 +332,65 @@ const div = StyleSheet.create({
 
 // ── Main Login Screen ────────────────────────────────────────────────────────
 const Login = () => {
-  const [email,    setEmail]    = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error,    setError]    = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const router       = useRouter();
-  const { login }    = useUser();
-  const { theme }    = useTheme();
+  const { login } = useUser();
+  const { theme } = useTheme();
 
   // Entrance animations
-  const headerY  = useRef(new Animated.Value(-30)).current;
-  const headerO  = useRef(new Animated.Value(0)).current;
-  const cardY    = useRef(new Animated.Value(40)).current;
-  const cardO    = useRef(new Animated.Value(0)).current;
+  const headerY = useRef(new Animated.Value(-30)).current;
+  const headerO = useRef(new Animated.Value(0)).current;
+  const cardY = useRef(new Animated.Value(40)).current;
+  const cardO = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
-      Animated.spring(headerY,  { toValue: 0, damping: 18, stiffness: 120, useNativeDriver: true }),
-      Animated.timing(headerO,  { toValue: 1, duration: 500, useNativeDriver: true }),
-      Animated.spring(cardY,    { toValue: 0, damping: 18, stiffness: 100, delay: 150, useNativeDriver: true }),
-      Animated.timing(cardO,    { toValue: 1, duration: 500, delay: 150, useNativeDriver: true }),
+      Animated.spring(headerY, {
+        toValue: 0,
+        damping: 18,
+        stiffness: 120,
+        useNativeDriver: true,
+      }),
+      Animated.timing(headerO, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.spring(cardY, {
+        toValue: 0,
+        damping: 18,
+        stiffness: 100,
+        delay: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardO, {
+        toValue: 1,
+        duration: 500,
+        delay: 150,
+        useNativeDriver: true,
+      }),
     ]).start();
   }, []);
 
   const handleLogin = async () => {
     setError(null);
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail || !password) {
+      setError("Please enter your email and password");
+      return;
+    }
+
+    setLoading(true);
     try {
-      await login(email, password);
+      await login(trimmedEmail, password);
     } catch (e) {
       setError(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -330,10 +405,15 @@ const Login = () => {
           keyboardShouldPersistTaps="handled"
         >
           {/* ── Header ── */}
-          <Animated.View style={[s.header, {
-            opacity: headerO,
-            transform: [{ translateY: headerY }],
-          }]}>
+          <Animated.View
+            style={[
+              s.header,
+              {
+                opacity: headerO,
+                transform: [{ translateY: headerY }],
+              },
+            ]}
+          >
             <View style={s.logoMark}>
               <CoinIcon size={40} />
             </View>
@@ -342,10 +422,15 @@ const Login = () => {
           </Animated.View>
 
           {/* ── Card ── */}
-          <Animated.View style={[s.card, {
-            opacity: cardO,
-            transform: [{ translateY: cardY }],
-          }]}>
+          <Animated.View
+            style={[
+              s.card,
+              {
+                opacity: cardO,
+                transform: [{ translateY: cardY }],
+              },
+            ]}
+          >
             <PillLabel>Welcome Back</PillLabel>
             <Text style={s.cardTitle}>Sign in to your account</Text>
 
@@ -357,6 +442,8 @@ const Login = () => {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
+                autoComplete="email"
+                textContentType="emailAddress"
               />
               <PremiumInput
                 label="Password"
@@ -364,6 +451,8 @@ const Login = () => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
+                autoComplete="password"
+                textContentType="password"
               />
             </View>
 
@@ -377,11 +466,13 @@ const Login = () => {
               </View>
             )}
 
-            <GoldButton onPress={handleLogin}>Login</GoldButton>
+            <GoldButton onPress={handleLogin} loading={loading}>
+              Login
+            </GoldButton>
 
             {/* Footer */}
             <View style={s.footerRow}>
-              <Text style={s.footerText}>Don't have an account?  </Text>
+              <Text style={s.footerText}>Don't have an account? </Text>
               <Link href="/register" replace>
                 <Text style={s.footerLink}>Sign Up</Text>
               </Link>

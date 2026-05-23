@@ -30,20 +30,20 @@ const { width: SCREEN_W } = Dimensions.get("window");
 
 // ── Design tokens ────────────────────────────────────────────────────────────
 const T = {
-  accentGold:     "#F5C842",
+  accentGold: "#F5C842",
   accentGoldDeep: "#C8A800",
-  accentGoldLight:"#FFF3C0",
-  coral:          "#FF7058",
-  teal:           "#40596B",
-  textDark:       "#2C1810",
-  textMid:        "#7A5C3C",
-  textLight:      "#BFA080",
-  bgWarm:         "#FFF8ED",
-  bgBorder:       "#F5DFA0",
-  bgCard:         "#FFFDF7",
-  error:          "#E53935",
-  success:        "#4CAF50",
-  successLight:   "#E8F5E9",
+  accentGoldLight: "#FFF3C0",
+  coral: "#FF7058",
+  teal: "#40596B",
+  textDark: "#2C1810",
+  textMid: "#7A5C3C",
+  textLight: "#BFA080",
+  bgWarm: "#FFF8ED",
+  bgBorder: "#F5DFA0",
+  bgCard: "#FFFDF7",
+  error: "#E53935",
+  success: "#4CAF50",
+  successLight: "#E8F5E9",
 };
 
 // ── Mini coin icon ───────────────────────────────────────────────────────────
@@ -51,10 +51,20 @@ function CoinIcon({ size = 22 }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 44 44">
       <Circle cx="22" cy="22" r="21" fill={T.accentGold} />
-      <Circle cx="22" cy="22" r="17" fill="none" stroke={T.accentGoldDeep} strokeWidth="2" />
+      <Circle
+        cx="22"
+        cy="22"
+        r="17"
+        fill="none"
+        stroke={T.accentGoldDeep}
+        strokeWidth="2"
+      />
       <Path
         d="M20 12 L20 32 M18 16 Q22 14 25 17 Q27 20 22 22 Q27 22 27 26 Q27 32 20 31"
-        stroke="#8B6914" strokeWidth="2" fill="none" strokeLinecap="round"
+        stroke="#8B6914"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
       />
     </Svg>
   );
@@ -65,15 +75,33 @@ function TopDecoration() {
   return (
     <View style={deco.container} pointerEvents="none">
       <Svg width={SCREEN_W} height={200} viewBox={`0 0 ${SCREEN_W} 200`}>
-        <Circle cx={SCREEN_W * 0.15} cy={-10} r={130}
-          fill={T.coral} fillOpacity={0.07} />
-        <Circle cx={SCREEN_W * 0.9} cy={80} r={90}
-          fill={T.accentGold} fillOpacity={0.11} />
-        <Circle cx={SCREEN_W * 0.45} cy={170} r={40}
-          fill={T.teal} fillOpacity={0.05} />
+        <Circle
+          cx={SCREEN_W * 0.15}
+          cy={-10}
+          r={130}
+          fill={T.coral}
+          fillOpacity={0.07}
+        />
+        <Circle
+          cx={SCREEN_W * 0.9}
+          cy={80}
+          r={90}
+          fill={T.accentGold}
+          fillOpacity={0.11}
+        />
+        <Circle
+          cx={SCREEN_W * 0.45}
+          cy={170}
+          r={40}
+          fill={T.teal}
+          fillOpacity={0.05}
+        />
         <Path
           d={`M0,80 Q${SCREEN_W * 0.4},40 ${SCREEN_W * 0.65},75 Q${SCREEN_W * 0.85},100 ${SCREEN_W},60`}
-          stroke={T.accentGold} strokeWidth="1.5" fill="none" strokeOpacity={0.35}
+          stroke={T.accentGold}
+          strokeWidth="1.5"
+          fill="none"
+          strokeOpacity={0.35}
         />
       </Svg>
     </View>
@@ -83,7 +111,9 @@ function TopDecoration() {
 const deco = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 0, left: 0, right: 0,
+    top: 0,
+    left: 0,
+    right: 0,
     zIndex: 0,
     pointerEvents: "none",
   },
@@ -127,16 +157,16 @@ function StrengthBar({ password }) {
   const getStrength = (pwd) => {
     if (!pwd || pwd.length < 4) return 0;
     let score = 0;
-    if (pwd.length >= 8)        score++;
-    if (/[A-Z]/.test(pwd))      score++;
-    if (/[0-9]/.test(pwd))      score++;
+    if (pwd.length >= 8) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
     if (/[^A-Za-z0-9]/.test(pwd)) score++;
     return score;
   };
 
   const strength = getStrength(password);
-  const labels   = ["", "Weak", "Fair", "Good", "Strong"];
-  const colors   = ["transparent", "#E53935", "#FF9800", "#F5C842", "#4CAF50"];
+  const labels = ["", "Weak", "Fair", "Good", "Strong"];
+  const colors = ["transparent", "#E53935", "#FF9800", "#F5C842", "#4CAF50"];
 
   if (!password) return null;
 
@@ -144,10 +174,13 @@ function StrengthBar({ password }) {
     <View style={str.container}>
       <View style={str.bars}>
         {[1, 2, 3, 4].map((n) => (
-          <View key={n} style={[
-            str.bar,
-            { backgroundColor: n <= strength ? colors[strength] : "#F0E8D8" },
-          ]} />
+          <View
+            key={n}
+            style={[
+              str.bar,
+              { backgroundColor: n <= strength ? colors[strength] : "#F0E8D8" },
+            ]}
+          />
         ))}
       </View>
       <Text style={[str.label, { color: colors[strength] }]}>
@@ -199,10 +232,7 @@ function PremiumInput({ label, valid, ...props }) {
 
   const borderColor = borderAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [
-      valid === true ? T.success : T.bgBorder,
-      T.accentGold,
-    ],
+    outputRange: [valid === true ? T.success : T.bgBorder, T.accentGold],
   });
 
   return (
@@ -211,14 +241,18 @@ function PremiumInput({ label, valid, ...props }) {
       <Animated.View style={[inp.container, { borderColor }]}>
         <ThemedTextInput
           {...props}
-          onFocus={() => { setFocused(true); props.onFocus?.(); }}
-          onBlur={() => { setFocused(false); props.onBlur?.(); }}
+          onFocus={() => {
+            setFocused(true);
+            props.onFocus?.();
+          }}
+          onBlur={() => {
+            setFocused(false);
+            props.onBlur?.();
+          }}
           style={[inp.field, props.style]}
           placeholderTextColor={T.textLight}
         />
-        {valid === true && (
-          <Text style={inp.checkmark}>✓</Text>
-        )}
+        {valid === true && <Text style={inp.checkmark}>✓</Text>}
       </Animated.View>
     </View>
   );
@@ -265,13 +299,21 @@ const inp = StyleSheet.create({
 });
 
 // ── Gold CTA button ──────────────────────────────────────────────────────────
-function GoldButton({ onPress, children }) {
+function GoldButton({ onPress, children, loading }) {
   const scale = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () =>
-    Animated.spring(scale, { toValue: 0.97, useNativeDriver: true, damping: 10 }).start();
+    Animated.spring(scale, {
+      toValue: 0.97,
+      useNativeDriver: true,
+      damping: 10,
+    }).start();
   const handlePressOut = () =>
-    Animated.spring(scale, { toValue: 1, useNativeDriver: true, damping: 10 }).start();
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+      damping: 10,
+    }).start();
 
   return (
     <Animated.View style={[gbtn.shadow, { transform: [{ scale }] }]}>
@@ -281,8 +323,11 @@ function GoldButton({ onPress, children }) {
         onPressOut={handlePressOut}
         style={gbtn.container}
         activeOpacity={0.9}
+        disabled={loading}
       >
-        <Text style={gbtn.text}>{children}</Text>
+        <Text style={gbtn.text}>
+          {loading ? "Creating Account..." : children}
+        </Text>
       </ThemedButton>
     </Animated.View>
   );
@@ -349,39 +394,72 @@ const ben = StyleSheet.create({
 
 // ── Main Register Screen ─────────────────────────────────────────────────────
 const Register = () => {
-  const [email,             setEmail]             = useState("");
-  const [password,          setPassword]          = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
-  const [error,             setError]             = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { register } = useUser();
-  const { theme }    = useTheme();
+  const { theme } = useTheme();
 
   // Entrance animations
   const headerY = useRef(new Animated.Value(-30)).current;
   const headerO = useRef(new Animated.Value(0)).current;
-  const cardY   = useRef(new Animated.Value(40)).current;
-  const cardO   = useRef(new Animated.Value(0)).current;
+  const cardY = useRef(new Animated.Value(40)).current;
+  const cardO = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
-      Animated.spring(headerY,  { toValue: 0, damping: 18, stiffness: 120, useNativeDriver: true }),
-      Animated.timing(headerO,  { toValue: 1, duration: 500, useNativeDriver: true }),
-      Animated.spring(cardY,    { toValue: 0, damping: 18, stiffness: 100, delay: 150, useNativeDriver: true }),
-      Animated.timing(cardO,    { toValue: 1, duration: 500, delay: 150, useNativeDriver: true }),
+      Animated.spring(headerY, {
+        toValue: 0,
+        damping: 18,
+        stiffness: 120,
+        useNativeDriver: true,
+      }),
+      Animated.timing(headerO, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.spring(cardY, {
+        toValue: 0,
+        damping: 18,
+        stiffness: 100,
+        delay: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(cardO, {
+        toValue: 1,
+        duration: 500,
+        delay: 150,
+        useNativeDriver: true,
+      }),
     ]).start();
   }, []);
 
   const handleSignUp = async () => {
     setError(null);
+
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail || !password || !confirmedPassword) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    if (password !== confirmedPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
     try {
-      if (password !== confirmedPassword) {
-        setError("Passwords do not match.");
-        return;
-      }
-      await register(email, password);
+      await register(trimmedEmail, password);
     } catch (e) {
       setError(e.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -399,10 +477,15 @@ const Register = () => {
           keyboardShouldPersistTaps="handled"
         >
           {/* ── Header ── */}
-          <Animated.View style={[s.header, {
-            opacity: headerO,
-            transform: [{ translateY: headerY }],
-          }]}>
+          <Animated.View
+            style={[
+              s.header,
+              {
+                opacity: headerO,
+                transform: [{ translateY: headerY }],
+              },
+            ]}
+          >
             <View style={s.logoMark}>
               <CoinIcon size={40} />
             </View>
@@ -411,10 +494,15 @@ const Register = () => {
           </Animated.View>
 
           {/* ── Card ── */}
-          <Animated.View style={[s.card, {
-            opacity: cardO,
-            transform: [{ translateY: cardY }],
-          }]}>
+          <Animated.View
+            style={[
+              s.card,
+              {
+                opacity: cardO,
+                transform: [{ translateY: cardY }],
+              },
+            ]}
+          >
             <PillLabel>Create Account</PillLabel>
             <Text style={s.cardTitle}>Join Vmax for free</Text>
 
@@ -428,7 +516,11 @@ const Register = () => {
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                valid={email.includes("@") && email.includes(".") ? true : undefined}
+                autoComplete="email"
+                textContentType="emailAddress"
+                valid={
+                  email.includes("@") && email.includes(".") ? true : undefined
+                }
               />
               <PremiumInput
                 label="Password"
@@ -436,6 +528,8 @@ const Register = () => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
+                autoComplete="new-password"
+                textContentType="newPassword"
               />
               <StrengthBar password={password} />
               <PremiumInput
@@ -444,6 +538,7 @@ const Register = () => {
                 value={confirmedPassword}
                 onChangeText={setConfirmedPassword}
                 secureTextEntry
+                autoComplete="new-password"
                 valid={passwordsMatch ? true : undefined}
               />
             </View>
@@ -454,7 +549,9 @@ const Register = () => {
               </View>
             )}
 
-            <GoldButton onPress={handleSignUp}>Create Account</GoldButton>
+            <GoldButton onPress={handleSignUp} loading={loading}>
+              Create Account
+            </GoldButton>
 
             <Text style={s.terms}>
               By signing up you agree to our{" "}
@@ -464,7 +561,7 @@ const Register = () => {
 
             {/* Footer */}
             <View style={s.footerRow}>
-              <Text style={s.footerText}>Already have an account?  </Text>
+              <Text style={s.footerText}>Already have an account? </Text>
               <Link href="/login" replace>
                 <Text style={s.footerLink}>Login</Text>
               </Link>

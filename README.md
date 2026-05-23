@@ -20,12 +20,12 @@ npm install
 
 ## 2. Configure environment variables
 
-This app uses `EXPO_PUBLIC_API_URL` in `app/services/api.js` for API requests.
+This app uses `EXPO_PUBLIC_BACKEND_API_URL` in `services/api.js` for API requests.
 
 Create a `.env` file in the project root with:
 
 ```env
-EXPO_PUBLIC_API_URL=http://YOUR_BACKEND_URL
+EXPO_PUBLIC_BACKEND_API_URL=http://YOUR_BACKEND_URL
 ```
 
 After changing `.env`, restart Expo.
