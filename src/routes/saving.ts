@@ -8,7 +8,7 @@ const route = express.Router();
 
 //  { email: user.email, userId: user.id},
 
-route.post('/setTotalIncome',auth,async (req:any, res:any)=>{
+route.post('/addTotalIncome',auth,async (req:any, res:any)=>{
     let con: PoolClient | null = null;
     try {
         const { totalIncome } = req.body;
@@ -53,60 +53,34 @@ route.post('/setMonthlyIncome',auth,async (req:any, res:any)=>{
 
 })
 
-route.post('/addSavings',auth,async (req:any, res:any)=>{
-    let con: PoolClient | null = null;
-    try {
-        const { saving } = req.body;
+// route.post('/addSavings',auth,async (req:any, res:any)=>{
+//     let con: PoolClient | null = null;
+//     try {
+//         const { saving } = req.body;
 
-        con = await pool.connect();
-        let result = await con.query('UPDATE "users" as u SET total_income = total_income - $1 WHERE u.user_id = $2', [saving, req.user?.userId]);
-        // let result = await con.query('UPDATE "goals" as u SET monthly_income = $1 WHERE u.user_id = $2', [monthlyIncome, req.user?.userId]);
-        const savingEachGoal = saving / req.user?.totalGoal; 
-        const totalDailyGoalSaving = await con.query(`UPDATE "goals" SET total_saving = total_saving + $1 WHERE user_id = $2 AND achieved = false RETURNING *`, [savingEachGoal, req.user?.userId]);
-        console.log("Total daily goal saving updated successfully");
-        console.log(totalDailyGoalSaving.rows);
+//         con = await pool.connect();
+//         let result = await con.query('UPDATE "users" as u SET total_income = total_income - $1 WHERE u.user_id = $2', [saving, req.user?.userId]);
+//         // let result = await con.query('UPDATE "goals" as u SET monthly_income = $1 WHERE u.user_id = $2', [monthlyIncome, req.user?.userId]);
+//         const savingEachGoal = saving / req.user?.totalGoal; 
+//         const totalDailyGoalSaving = await con.query(`UPDATE "goals" SET total_saving = total_saving + $1 WHERE user_id = $2 AND achieved = false RETURNING *`, [savingEachGoal, req.user?.userId]);
+//         console.log("Total daily goal saving updated successfully");
+//         console.log(totalDailyGoalSaving.rows);
 
-        return res.json({
-            success: true
-        });
-    }
-    catch (err) {
-        console.error("error", err);
-        return res.json({
-            success: false
-        });
-    } finally {
-        if (con) con.release();
-    }
+//         return res.json({
+//             success: true
+//         });
+//     }
+//     catch (err) {
+//         console.error("error", err);
+//         return res.json({
+//             success: false
+//         });
+//     } finally {
+//         if (con) con.release();
+//     }
 
-})
-route.post('/addSavingsByPic',auth,async (req:any, res:any)=>{
-    let con: PoolClient | null = null;
-    try {
-        const { saving } = req.body;
+// })
 
-        con = await pool.connect();
-        let result = await con.query('UPDATE "users" as u SET total_income = total_income - $1 WHERE u.user_id = $2', [saving, req.user?.userId]);
-        // let result = await con.query('UPDATE "goals" as u SET monthly_income = $1 WHERE u.user_id = $2', [monthlyIncome, req.user?.userId]);
-        const savingEachGoal = saving / req.user?.totalGoal; 
-        const totalDailyGoalSaving = await con.query(`UPDATE "goals" SET total_saving = total_saving + $1 WHERE user_id = $2 AND achieved = false RETURNING *`, [savingEachGoal, req.user?.userId]);
-        console.log("Total daily goal saving updated successfully");
-        console.log(totalDailyGoalSaving.rows);
-
-        return res.json({
-            success: true
-        });
-    }
-    catch (err) {
-        console.error("error", err);
-        return res.json({
-            success: false
-        });
-    } finally {
-        if (con) con.release();
-    }
-
-})
 // route.post('/getUnallocatedFund',auth,async (req:any, res:any)=>{
 //     let con: PoolClient | null = null;
 //     try {

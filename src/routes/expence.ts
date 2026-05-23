@@ -67,6 +67,7 @@ function getUniqName(fileName: string) {
   const uniqueId = Math.random().toString(36).substring(2) + Date.now().toString(36);
   return `${uniqueId}-${Date.now()}.${fileExtension}`;
 }
+
 route.post('/scanExpensePic', upload.single('pic'),async (req:any, res:any)=>{
     
     try {    
@@ -104,10 +105,11 @@ route.post('/scanExpensePic', upload.single('pic'),async (req:any, res:any)=>{
             const expenseData = JSON.parse(toolMessage?.content as string);
         
         console.log(expenseData);
-       if(!expenseData.check || expenseData.totalAmount === null|| expenseData.totalAmount === null) {
+       if(!expenseData.check || expenseData.totalAmount === null || expenseData.category === null) {
         throw new Error("The text contains invoice or expense relevant information but failed to extract. Please make sure the text contains clear information like totalAmount and try again.");
        }
         return res.json({
+            data:expenseData,
             success: true
         });
         // const userTotalIncome = req.user?.minimumDailyIncome - totalAmount;
