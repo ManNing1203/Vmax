@@ -7,6 +7,8 @@ import goalRoute from './routes/goal';
 import pool from './db';
 import session from "express-session";
 import path from "path";
+import './schedule/dailyTask';
+import './schedule/monthlyTask';
 import { Pool, PoolClient } from 'pg';
 // const apiRoute = express.Router();
 
