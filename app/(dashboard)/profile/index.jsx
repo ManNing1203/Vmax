@@ -162,32 +162,6 @@ const ProfileIndex = () => {
           </View>
         </View>
 
-        {/* Stats strip */}
-        {/* <View style={styles.statsStrip}>
-          <View style={styles.statCard}>
-            <ThemedText style={styles.statIcon}>💰</ThemedText>
-            <ThemedText style={styles.statLabel}>Monthly</ThemedText>
-            <ThemedText style={[styles.statValue, { color: T.accentPurpleDeep }]}>
-              {savedSalary !== "0" ? `RM ${parseFloat(savedSalary).toLocaleString()}` : "—"}
-            </ThemedText>
-          </View>
-          <View style={styles.statCard}>
-            <ThemedText style={styles.statIcon}>📆</ThemedText>
-            <ThemedText style={styles.statLabel}>Daily budget</ThemedText>
-            <ThemedText style={[styles.statValue, { color: T.teal }]}>RM {dailyBudget}</ThemedText>
-          </View>
-          <View style={styles.statCard}>
-            <ThemedText style={styles.statIcon}>✦</ThemedText>
-            <ThemedText style={styles.statLabel}>Savings / day</ThemedText>
-            <ThemedText style={[styles.statValue, { color: T.coral }]}>RM 45.50</ThemedText>
-          </View>
-        </View> */}
-
-        {/* Section: Personal */}
-        {/* <View style={styles.sectionHeaderWrap}>
-          <View style={styles.sectionDot} />
-          <ThemedText style={styles.sectionLabel}>Personal</ThemedText>
-        </View> */}
         <View style={styles.menuCard}>
           <MenuItem
             icon="shield-checkmark-outline"

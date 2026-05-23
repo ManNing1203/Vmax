@@ -17,7 +17,7 @@ import ThemedView       from "../../../components/ThemedView";
 import PiggyBankTracker from "../../../components/PiggyBankTracker";
 import Spacer           from "../../../components/Spacer";
 
-import { useTutorial } from "./GoalTutorialOverlay";
+import { useTutorial, TutorialProvider } from "./GoalTutorialOverlay";
 
 const { width: SCREEN_W } = Dimensions.get("window");
 
@@ -313,7 +313,13 @@ const MyGoalIndex = () => {
   );
 };
 
-export default MyGoalIndex;
+export default function MyGoalScreen() {
+  return (
+    <TutorialProvider>
+      <MyGoalIndex />
+    </TutorialProvider>
+  );
+}
 
 const s = StyleSheet.create({
   listContent:      { paddingHorizontal: 16 },

@@ -331,8 +331,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 6,
     marginTop: 14,
-    marginBottom: 0,
-    paddingLeft: 4,
+    marginBottom: 5,
+    paddingLeft: 5,
   },
   sectionDot: {
     width: 5, height: 5, borderRadius: 2.5,
