@@ -13,6 +13,7 @@ import { StateGraph, START, END, Annotation } from "@langchain/langgraph";
 import { createAgent, tool } from 'langchain';
 import model from '../model';
 import SavingTool from '../tools/savingTool';
+import { adviceTool } from '../tools/adviceTool';
 
 
 const GraphState = Annotation.Root({
@@ -88,24 +89,24 @@ const weatherTool = tool(
 
 const contextSchema = z.object({
   userName: z.string(),
-  userId: z.string(),
+  userId: z.number(),
 });
 
 export async function RagTesting2(){
  const agent = createAgent(
   {
     model,
-    tools:[SavingTool],
+    tools:[adviceTool],
     contextSchema
-  }
+}
  )
  
 const result = await agent.invoke(
   {
-    messages: [{ role: "user", content: "What is my name?" }],
+    messages: [{ role: "user", content: "Generate ONLY ONE short financial notification message for the user based on their financial summary" }],
   },
   {
-    context: { userId: "John Smith",userName :"jojo" }
+    context: { userId: 7, userName: "jojo" }
   },
 );
 

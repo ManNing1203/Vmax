@@ -16,7 +16,7 @@ const app = express();
 
 const Port = 3000;
 app.use(express.json());
-app.use("/users",userRoute);
+app.use("/user",userRoute);
 app.use("/rag",ragRoute);
 app.use("/saving",savingRoute);
 app.use("/expense",expenseRoute);

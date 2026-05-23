@@ -47,7 +47,6 @@ function getDaysLeft(futureDateInput: string | Date): number {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   futureDate.setHours(0, 0, 0, 0);
-
   const msInADay = 24 * 60 * 60 * 1000;
   return Math.max(0, Math.ceil((futureDate.getTime() - today.getTime()) / msInADay));
 }
