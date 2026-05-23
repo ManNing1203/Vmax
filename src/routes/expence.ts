@@ -6,21 +6,25 @@ import pool from "../db";
 import auth from "../middleware/auth";
 import { snakeToCamel } from "../utils/variableFormat";
 import multer from "multer";
-
+import Tesseract, { createWorker } from "tesseract.js";
+import { createAgent } from "langchain";
+import model from "../model";
+import { invoiceTool } from "../tools/invoiceTool";
 const route = express.Router();
 
 //  { email: user.email, userId: user.id},
 
 route.post('/addExpense',auth,async (req:any, res:any)=>{
     let con: PoolClient | null = null;
-    try {
+    try {    
         con = await pool.connect();
 
         const { totalAmount, description } = req.body; 
-        const totalDailyExpenses = await con.query(`SELECT SUM(total_amount) as total_expenses FROM "expenses" WHERE user_id = $1 AND created_at >= DATE_TRUNC("day", CURRENT_DATE)`, [req.user?.userId]);
-        const totalDailyGoalSaving = await con.query(`SELECT SUM(minimum_daily_saving) as total_goal_saving FROM "goals" WHERE user_id = $1 AND achieved = false`, [req.user?.userId]);
-        if(totalDailyExpenses.rows[0].total_expenses > totalDailyGoalSaving.rows[0].total_goal_saving) {
-           return res.json({
+        const totalDailyExpenses = await con.query(`SELECT SUM(total_amount) as total_expenses FROM "expenses" WHERE user_id = $1 AND created_at >= DATE_TRUNC('day', CURRENT_DATE)`, [req.user?.userId]);
+        const totalDailyGoalSaving = await con.query(`SELECT SUM(minimum_daily_goal_saving) as total_goal_saving FROM "goals" WHERE user_id = $1 AND achieved = false`, [req.user?.userId]);
+        const userTotalDailyRemaining = (req.user?.totalIncome / 30) - totalDailyExpenses.rows[0].total_expenses;
+        if(userTotalDailyRemaining >= totalDailyGoalSaving.rows[0].total_goal_saving) {
+        return res.json({
             success: false,
             overLimit: true,
             message: "You have reached your daily income limit. Please adjust your expenses or increase your total income."
@@ -58,25 +62,51 @@ route.post('/addExpense',auth,async (req:any, res:any)=>{
 
 })
 const upload = multer({ dest: "uploads/" });
-
-route.post('/addExpenseByPic', auth, upload.single('pic'),async (req:any, res:any)=>{
-    let con: PoolClient | null = null;
+function getUniqName(fileName: string) {
+  const fileExtension = fileName.split('.').pop();
+  const uniqueId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+  return `${uniqueId}-${Date.now()}.${fileExtension}`;
+}
+route.post('/scanExpensePic', upload.single('pic'),async (req:any, res:any)=>{
+    
     try {    
-        con = await pool.connect();
-        const { totalAmount, description } = req.body; 
-        const totalDailyExpenses = await con.query(`SELECT SUM(total_amount) as total_expenses FROM "expenses" WHERE user_id = $1 AND created_at >= DATE_TRUNC('day', CURRENT_DATE)`, [req.user?.userId]);
-        const totalDailyGoalSaving = await con.query(`SELECT SUM(minimum_daily_saving) as total_goal_saving FROM "goals" WHERE user_id = $1 AND achieved = false`, [req.user?.userId]);
-        if(totalDailyExpenses.rows[0].total_expenses > totalDailyGoalSaving.rows[0].total_goal_saving) {
+    console.log("File received:", req.file?.originalname); // Debug log to check the received file
         
-        return res.json({
-            success: false,
-            overLimit: true,
-            message: "You have reached your daily income limit. Please adjust your expenses or increase your total income."
+        if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: "No file uploaded",
         });
-        }
-        let result = await con.query('INSERT INTO "expenses" (user_id, total_amount, description) VALUES ($1, $2, $3) RETURNING *', [req.user?.userId, totalAmount, description]);
-        console.log("Expense added successfully", result.rows[0]);
-  
+      }
+        const worker = await createWorker(['eng','chi_sim','msa']);
+        const ret = await worker.recognize(req.file.path);
+        console.log(ret.data.text);
+        await worker.terminate();
+
+        const agent = createAgent(
+            {
+                model,
+                tools:[invoiceTool]
+            }
+        )
+        const result = await agent.invoke(
+            {
+                messages: [{ role: "user", content: `Extract the expense information from the following text and return in JSON format with keys: category, description, totalAmount, date. Text: ${ret.data.text}` }],
+            },
+        );
+        const messages = result.messages;
+
+        // find tool message
+        const toolMessage = messages.find(
+        (m: any) => m._getType?.() === "tool"
+        );
+        if(toolMessage) {
+            const expenseData = JSON.parse(toolMessage?.content as string);
+        
+        console.log(expenseData);
+       if(!expenseData.check || expenseData.totalAmount === null|| expenseData.totalAmount === null) {
+        throw new Error("The text contains invoice or expense relevant information but failed to extract. Please make sure the text contains clear information like totalAmount and try again.");
+       }
         return res.json({
             success: true
         });
@@ -95,15 +125,16 @@ route.post('/addExpenseByPic', auth, upload.single('pic'),async (req:any, res:an
         // }
      
     }
+    }
     catch (err) {
         console.error("error", err);
         return res.json({
             success: false
         });
     } finally {
-        if (con) con.release();
+           
     }
-
+     
 })
 
 route.get('/',auth,async (req:any, res:any)=>{

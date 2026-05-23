@@ -24,7 +24,6 @@ const ExpenseTool = tool(
         .optional()
         .describe(`
           The time grouping level for the result.
-
           Examples:
           - "expense day" -> day
           - "expense month" -> month

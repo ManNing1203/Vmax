@@ -60,7 +60,7 @@ route.post('/addGoal',auth,async (req:any, res:any)=>{
         const minimumDailyIncome = totalTarget / daysLeft;
         con = await pool.connect();
         let update = await con.query('UPDATE "users" as u SET total_goal = total_goal + 1 WHERE u.user_id = $1', [req.user?.userId]);
-        let result = await con.query('INSERT INTO "goals" (user_id, description, total_target,date,minimum_daily_income) VALUES ($1, $2, $3, $4,$5) RETURNING *', [req.user?.userId, description, totalTarget, date, minimumDailyIncome] );
+        let result = await con.query('INSERT INTO "goals" (user_id, description, total_target,date,minimum_daily_goal_saving) VALUES ($1, $2, $3, $4,$5) RETURNING *', [req.user?.userId, description, totalTarget, date, minimumDailyIncome] );
         console.log("Goal added successfully");
         console.log(result.rows);
         return res.json({
