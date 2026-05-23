@@ -25,6 +25,8 @@ import ThemedLoader from "../../../components/ThemedLoader";
 import PiggyBankTracker from "../../../components/PiggyBankTracker";
 import Spacer from "../../../components/Spacer";
 import { getGoalsRequest, normalizeGoalFromApi } from "../../../services/goal";
+import { getExpensesRequest } from "../../../services/expense";
+import { getMonthlyIncomeRequest } from "../../../services/saving";
 
 import { useTutorial, TutorialProvider } from "./GoalTutorialOverlay";
 
@@ -47,8 +49,7 @@ const T = {
   greenLight: "#E8F5E9",
 };
 
-const SALARY = 3000;
-const EXPENSES_TODAY = 40;
+const FALLBACK_SALARY = 0;
 
 const daysRemaining = (str) => {
   if (!str) return 0;
@@ -355,17 +356,47 @@ const MyGoalIndex = () => {
   const [completedExpanded, setCompletedExpanded] = useState(false);
   const { showInfo } = useTutorial();
   const [goals, setGoals] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState("");
-
+  const hasLoadedRef = useRef(false);
+  const [monthlyIncome, setMonthlyIncome] = useState(FALLBACK_SALARY);
+  const [spentToday, setSpentToday] = useState(0);
   const loadGoals = useCallback(async () => {
-    setIsLoading(true);
+    if (!hasLoadedRef.current) setIsLoading(true);
     setLoadError("");
 
     try {
       const response = await getGoalsRequest();
       const rows = Array.isArray(response?.data) ? response.data : [];
       setGoals(rows.map((goal, index) => normalizeGoalFromApi(goal, index)));
+      // concurrently fetch monthly income and today's expenses; tolerate
+      // failures so goals still show even if these calls fail
+      const [incomeRes, expensesRes] = await Promise.allSettled([
+        getMonthlyIncomeRequest(),
+        getExpensesRequest(),
+      ]);
+
+      if (incomeRes.status === "fulfilled") {
+        const payload = incomeRes.value ?? incomeRes.value?.data ?? {};
+        const mi =
+          payload?.monthlyIncome ??
+          payload?.monthly_income ??
+          payload?.data?.monthlyIncome ??
+          payload?.data?.monthly_income ??
+          null;
+        setMonthlyIncome(Number(mi) || FALLBACK_SALARY);
+      }
+
+      if (expensesRes.status === "fulfilled") {
+        const expensesList = expensesRes.value?.data ?? [];
+        const today = new Date().toISOString().slice(0, 10);
+        const sumToday = expensesList
+          .filter((e) => String(e?.created_at ?? "").startsWith(today))
+          .reduce((s, e) => s + Number(e.amount || 0), 0);
+        setSpentToday(sumToday);
+      }
+
+      hasLoadedRef.current = true;
     } catch (error) {
       setGoals([]);
       setLoadError(error?.message || "Unable to load your goals right now.");
@@ -389,15 +420,12 @@ const MyGoalIndex = () => {
     [goals],
   );
 
-  const daily_budget = SALARY / 30;
-  const daily_saveable = Math.max(daily_budget - EXPENSES_TODAY, 0);
+  const daily_budget = monthlyIncome / 30;
+  const daily_saveable = Math.max(daily_budget - spentToday, 0);
 
   const contributions = useMemo(() => {
-    const weights = active.map((g) => 1 / daysRemaining(g.target_date));
-    const sumWeights = weights.reduce((a, b) => a + b, 0);
-    return active.map((_, i) =>
-      sumWeights > 0 ? daily_saveable * (weights[i] / sumWeights) : 0,
-    );
+    const n = active.length;
+    return active.map(() => (n > 0 ? daily_saveable / n : 0));
   }, [active, daily_saveable]);
 
   const totalCurrent = active.reduce((sum, g) => sum + g.current_amount, 0);
@@ -484,7 +512,7 @@ const MyGoalIndex = () => {
               <SummaryCard
                 icon="🧾"
                 label="Spent Today"
-                value={`RM ${EXPENSES_TODAY}`}
+                value={`RM ${spentToday.toFixed(0)}`}
                 valueColor={T.coral}
                 infoKey="spentToday"
               />

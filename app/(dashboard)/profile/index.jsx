@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -23,7 +23,10 @@ import Spacer from "../../../components/Spacer";
 import ProfileIcon from "../../../assets/img/profile_icon.png";
 import { Colors } from "../../../constants/Colors";
 import { useUser } from "../../../hooks/useUser";
-import { setMonthlyIncomeRequest } from "../../../services/saving";
+import {
+  getMonthlyIncomeRequest,
+  setMonthlyIncomeRequest,
+} from "../../../services/saving";
 import { useTheme } from "../../../hooks/useTheme";
 
 const { width: SCREEN_W } = Dimensions.get("window");
@@ -177,6 +180,42 @@ const ProfileIndex = () => {
     { date: "12 May 2026", amount: "RM38.45" },
   ];
 
+  useEffect(() => {
+    if (!user) return;
+
+    setSavedUsername(user?.name || "");
+    setDraftUsername(user?.name || "");
+    setSavedProfileImage(user?.profileImageUri || null);
+    setDraftProfileImage(user?.profileImageUri || null);
+  }, [user]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadMonthlyIncome() {
+      try {
+        const res = await getMonthlyIncomeRequest();
+        if (!mounted) return;
+
+        const monthlyIncome = res?.monthlyIncome ?? 0;
+        const nextSalary = String(monthlyIncome);
+
+        setSavedSalary(nextSalary);
+        setDraftSalary(nextSalary);
+      } catch (error) {
+        if (!mounted) return;
+        setSavedSalary("0");
+        setDraftSalary("0");
+      }
+    }
+
+    loadMonthlyIncome();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -229,7 +268,6 @@ const ProfileIndex = () => {
       }
 
       setSavedSalary(draftSalary.trim());
-      await updateUser({ salary: monthlyIncome });
 
       Alert.alert("Success", "Salary updated successfully");
       setActiveModal(null);

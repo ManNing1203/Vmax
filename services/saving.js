@@ -20,6 +20,15 @@ export async function setMonthlyIncomeRequest(monthlyIncome) {
   }
 }
 
+export async function getMonthlyIncomeRequest() {
+  try {
+    const response = await api.get("/saving/getMonthlyIncome");
+    return response.data;
+  } catch (error) {
+    throw new Error(error?.response?.data?.message);
+  }
+}
+
 // export async function addSavingsRequest(saving) {
 //   const response = await api.post("/saving/addSavings", { saving });
 //   return response.data;
