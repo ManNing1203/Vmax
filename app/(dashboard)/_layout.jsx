@@ -92,7 +92,7 @@ export default function DashboardLayout() {
 const styles = StyleSheet.create({
   barWrapper: {
     position: "absolute",
-    bottom: 0,
+    bottom: 10,
     left: 0,
     right: 0,
     paddingHorizontal: 16,

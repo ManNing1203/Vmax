@@ -28,7 +28,7 @@ export default function MyGoalLayout() {
         <Stack.Screen
           name="add-mygoal"
           options={{
-            headerTitle: "Add Goal",
+            headerTitle: "Add Goal", 
             headerBackVisible: false,
             headerLeft: () => (
               <TouchableOpacity onPress={() => router.back()}>

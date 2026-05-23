@@ -86,7 +86,7 @@ export default FloatingChatButton;
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 100,
+    bottom: 105,
     right: 20,
     zIndex: 1000,
   },
