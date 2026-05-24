@@ -1,6 +1,6 @@
 import { Image } from "react-native";
 
-import TempLogo from "../assets/img/temp_logo.png";
+import TempLogo from "../assets/img/logo.png";
 
 const ThemedLogo = ({ style, ...props }) => {
   // Logic to determine which logo to use based on the color scheme if have different logos for light and dark mode

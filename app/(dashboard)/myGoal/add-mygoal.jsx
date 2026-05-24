@@ -24,6 +24,8 @@ import ThemedTextInput from "../../../components/ThemedTextInput";
 import ThemedButton from "../../../components/ThemedButton";
 import Spacer from "../../../components/Spacer";
 import { addGoalRequest } from "../../../services/goal";
+import { getExpensesRequest } from "../../../services/expense";
+import { getMonthlyIncomeRequest } from "../../../services/saving";
 
 const { width: SCREEN_W } = Dimensions.get("window");
 
@@ -41,10 +43,6 @@ const T = {
   bgBorder: "#F5DFA0",
   bgCard: "#FFFDF7",
 };
-
-// ── Mock salary data (from profile) ──────────────────────────────────────────
-const SALARY = 3000;
-const DAILY_SAVEABLE = 60; // pulled fresh from formula layer in production
 
 const formatDate = (d) =>
   d
@@ -326,6 +324,9 @@ const AddMyGoal = () => {
     date: "",
   });
 
+  const [monthlyIncome, setMonthlyIncome] = useState(0);
+  const [spentToday, setSpentToday] = useState(0);
+
   // Entrance animation
   const cardY = useRef(new Animated.Value(36)).current;
   const cardO = useRef(new Animated.Value(0)).current;
@@ -346,9 +347,11 @@ const AddMyGoal = () => {
   }, []);
 
   // AI date suggestion
+  const daily_saveable = Math.max(monthlyIncome / 30 - spentToday, 0);
+
   const daysNeeded =
-    targetAmount && DAILY_SAVEABLE > 0
-      ? Math.ceil(parseFloat(targetAmount) / DAILY_SAVEABLE)
+    targetAmount && daily_saveable > 0
+      ? Math.ceil(parseFloat(targetAmount) / daily_saveable)
       : null;
   const suggestedDate = daysNeeded
     ? new Date(Date.now() + daysNeeded * 86_400_000)
@@ -356,8 +359,8 @@ const AddMyGoal = () => {
 
   const suggestionText = daysNeeded
     ? daysNeeded > 365
-      ? `⚠️ At your current saving rate (RM ${DAILY_SAVEABLE}/day), this goal may take over a year. Consider reducing spending or the target amount.`
-      : `At RM ${DAILY_SAVEABLE}/day you'll reach this in ${daysNeeded} days — by ${formatDate(suggestedDate)}.`
+      ? `⚠️ At your current saving rate (RM ${daily_saveable.toFixed(2)}/day), this goal may take over a year. Consider reducing spending or the target amount.`
+      : `At RM ${daily_saveable.toFixed(2)}/day you'll reach this in ${daysNeeded} days — by ${formatDate(suggestedDate)}.`
     : null;
 
   const handleStart = async () => {
@@ -409,6 +412,47 @@ const AddMyGoal = () => {
       }));
     }
   };
+
+  // Load monthly income and today's expenses to compute saveable
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const [incomeRes, expensesRes] = await Promise.allSettled([
+          getMonthlyIncomeRequest(),
+          getExpensesRequest(),
+        ]);
+
+        if (!mounted) return;
+
+        if (incomeRes.status === "fulfilled") {
+          const payload = incomeRes.value ?? incomeRes.value?.data ?? {};
+          const mi =
+            payload?.monthlyIncome ??
+            payload?.monthly_income ??
+            payload?.data?.monthlyIncome ??
+            payload?.data?.monthly_income ??
+            null;
+          setMonthlyIncome(Number(mi) || 0);
+        }
+
+        if (expensesRes.status === "fulfilled") {
+          const expensesList = expensesRes.value?.data ?? [];
+          const today = new Date().toISOString().slice(0, 10);
+          const sumToday = expensesList
+            .filter((e) => String(e?.created_at ?? "").startsWith(today))
+            .reduce((s, e) => s + Number(e.amount || 0), 0);
+          setSpentToday(sumToday);
+        }
+      } catch (e) {
+        // tolerate failures; fallbacks already present
+      }
+    })();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -403,7 +403,7 @@ export default function GoalDetailScreen() {
         <Spacer height={20} />
 
         {/* ── Action buttons ── */}
-        <View style={s.actionRow}>
+        {/* <View style={s.actionRow}>
           <TouchableOpacity
             style={[s.btnTopUp, { backgroundColor: T.accentGold }]}
             activeOpacity={0.82}
@@ -430,10 +430,10 @@ export default function GoalDetailScreen() {
           </TouchableOpacity>
         </View>
 
-        <Spacer height={28} />
+        <Spacer height={28} /> */}
 
         {/* ── Daily contributions ── */}
-        <ThemedText style={[s.sectionTitle, { color: T.textMid }]}>
+        {/* <ThemedText style={[s.sectionTitle, { color: T.textMid }]}>
           DAILY CONTRIBUTIONS
         </ThemedText>
         <Spacer height={12} />
@@ -460,7 +460,7 @@ export default function GoalDetailScreen() {
           ))
         )}
 
-        <Spacer height={40} />
+        <Spacer height={40} /> */}
       </ScrollView>
     </ThemedView>
   );

@@ -341,8 +341,7 @@ function CompletedGoalCard({ item }) {
           {item.title}
         </ThemedText>
         <ThemedText style={[s.completedMeta, { color: T.textLight }]}>
-          RM {item.target_amount.toLocaleString()} · Done{" "}
-          {fmtDate(item.completed_date)}
+          RM {item.target_amount.toLocaleString()} · Done
         </ThemedText>
       </View>
       <ThemedText style={[s.checkmark, { color: T.green }]}>✓</ThemedText>
@@ -353,7 +352,7 @@ function CompletedGoalCard({ item }) {
 // ── Screen ────────────────────────────────────────────────────────────────────
 const MyGoalIndex = () => {
   const router = useRouter();
-  const [completedExpanded, setCompletedExpanded] = useState(false);
+  const [completedExpanded, setCompletedExpanded] = useState(true);
   const { showInfo } = useTutorial();
   const [goals, setGoals] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -369,8 +368,6 @@ const MyGoalIndex = () => {
       const response = await getGoalsRequest();
       const rows = Array.isArray(response?.data) ? response.data : [];
       setGoals(rows.map((goal, index) => normalizeGoalFromApi(goal, index)));
-      // concurrently fetch monthly income and today's expenses; tolerate
-      // failures so goals still show even if these calls fail
       const [incomeRes, expensesRes] = await Promise.allSettled([
         getMonthlyIncomeRequest(),
         getExpensesRequest(),

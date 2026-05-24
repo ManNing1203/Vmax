@@ -5,6 +5,7 @@ import Svg, { Circle, Path } from "react-native-svg";
 
 import ThemedView from "../components/ThemedView";
 import ThemedText from "../components/ThemedText";
+import ThemedLogo from "../components/ThemedLogo";
 import { useUser } from "../hooks/useUser";
 
 const { width: W, height: H } = Dimensions.get("window");

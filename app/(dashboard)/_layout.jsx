@@ -6,22 +6,22 @@ import { useTheme } from "../../hooks/useTheme";
 import FloatingChatButton from "../../components/chatbot/FloatingChatButton";
 
 const T = {
-  accentGold:        "#F5C842",
-  accentGoldMid:     "#F5DFA0",
-  accentPurpleDeep:  "#534AB7",
+  accentGold: "#F5C842",
+  accentGoldMid: "#F5DFA0",
+  accentPurpleDeep: "#534AB7",
   accentPurpleLight: "#EEEDFE",
-  textDark:          "#2C1810",
-  textLight:         "#BFA080",
-  bgCard:            "#FFFDF7",
-  bgWarm:            "#FFF8ED",
-  bgBorder:          "#F5DFA0",
+  textDark: "#2C1810",
+  textLight: "#BFA080",
+  bgCard: "#FFFDF7",
+  bgWarm: "#FFF8ED",
+  bgBorder: "#F5DFA0",
 };
 
 const TABS = [
-  { name: "myGoal",    label: "Home",     icon: "home"    },
-  { name: "groupGoal", label: "Groups",   icon: "people"  },
-  { name: "expenses",  label: "Expenses", icon: "receipt" },
-  { name: "profile",   label: "Profile",  icon: "person"  },
+  { name: "myGoal", label: "Home", icon: "home" },
+  // { name: "groupGoal", label: "Groups",   icon: "people"  },
+  { name: "expenses", label: "Expenses", icon: "receipt" },
+  { name: "profile", label: "Profile", icon: "person" },
 ];
 
 function CustomTabBar({ state, descriptors, navigation }) {
@@ -81,9 +81,16 @@ export default function DashboardLayout() {
         screenOptions={{ headerShown: false }}
       >
         {TABS.map((tab) => (
-          <Tabs.Screen key={tab.name} name={tab.name} options={{ title: tab.label }} />
+          <Tabs.Screen
+            key={tab.name}
+            name={tab.name}
+            options={{ title: tab.label }}
+          />
         ))}
-        <Tabs.Screen name="chatbot" options={{ href: null, title: "Chatbot" }} />
+        <Tabs.Screen
+          name="chatbot"
+          options={{ href: null, title: "Chatbot" }}
+        />
       </Tabs>
     </UserOnly>
   );
