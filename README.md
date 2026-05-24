@@ -41,9 +41,9 @@ npm run web
 
 ## AI Tools
 The following AI tools are integrated or used in this project:
-- **ChatGPT** - OpenAI's conversational AI assistant
-- **DeepSeek API** - DeepSeek's AI API for advanced language model capabilities
-- **Claude** - Anthropic's AI assistant
+- **ChatGPT**
+- **DeepSeek API**
+- **Claude**
 
 ## Project Structure
 
