@@ -19,6 +19,7 @@ import {
 import { Link } from "expo-router";
 import { useState, useRef, useEffect } from "react";
 import Svg, { Path, Circle, Ellipse, G } from "react-native-svg";
+import CoinIcon from "../../components/CoinIcon";
 
 import ThemedView from "../../components/ThemedView";
 import ThemedScrollView from "../../components/ThemedScrollView";
@@ -49,30 +50,7 @@ const T = {
   errorBg: "#FFF0F0",
 };
 
-// ── Mini piggy coin icon ─────────────────────────────────────────────────────
-function CoinIcon({ size = 22 }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 44 44">
-      <Circle cx="22" cy="22" r="21" fill={T.accentGold} />
-      <Circle
-        cx="22"
-        cy="22"
-        r="17"
-        fill="none"
-        stroke={T.accentGoldDeep}
-        strokeWidth="2"
-      />
-      <Path
-        d="M20 12 L20 32 M18 16 Q22 14 25 17 Q27 20 22 22 Q27 22 27 26 Q27 32 20 31"
-        stroke="#8B6914"
-        strokeWidth="2"
-        fill="none"
-        strokeLinecap="round"
-      />
-    </Svg>
-  );
-}
-
+// CoinIcon now provided by components/CoinIcon
 // ── Decorative top arc ───────────────────────────────────────────────────────
 function TopDecoration() {
   return (

@@ -5,7 +5,7 @@ import Svg, { Circle, Path } from "react-native-svg";
 
 import ThemedView from "../components/ThemedView";
 import ThemedText from "../components/ThemedText";
-import ThemedLogo from "../components/ThemedLogo";
+import CoinIcon from "../components/CoinIcon";
 import { useUser } from "../hooks/useUser";
 
 const { width: W, height: H } = Dimensions.get("window");
@@ -206,7 +206,7 @@ const Home = () => {
       >
         <View style={styles.logoRingOuter}>
           <View style={styles.logoRingInner}>
-            <ThemedLogo style={styles.logo} />
+            <CoinIcon size={120} />
           </View>
         </View>
       </Animated.View>
