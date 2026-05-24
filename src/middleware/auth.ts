@@ -40,5 +40,8 @@ export default async function auth(req:any, res:any, next: NextFunction) {
       success: false,
       message: "Invalid token",
     });
+
+  }finally {
+        if (con) con.release();
   }
 }
