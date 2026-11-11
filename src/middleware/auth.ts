@@ -1,4 +1,5 @@
 import { NextFunction,Request,Response } from "express";
+import { JWT_SECRET } from "../config";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from 'jsonwebtoken';
 import { PoolClient } from "pg";
@@ -24,7 +25,7 @@ export default async function auth(req:any, res:any, next: NextFunction) {
   try {
     const decoded = jwt.verify(
       authHeader,
-      "secretkey"
+      JWT_SECRET
     ) as MyJwtPayload;
 
     con = await pool.connect();

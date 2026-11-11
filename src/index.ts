@@ -10,11 +10,12 @@ import path from "path";
 import './schedule/dailyTask';
 import './schedule/monthlyTask';
 import { Pool, PoolClient } from 'pg';
+import { PORT, SESSION_SECRET } from './config';
 // const apiRoute = express.Router();
 
 const app = express();
 
-const Port = 3000;
+const Port = PORT;
 app.use(express.json());
 app.use("/user",userRoute);
 app.use("/rag",ragRoute);
@@ -23,7 +24,7 @@ app.use("/expense",expenseRoute);
 app.use("/goal",goalRoute);
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })

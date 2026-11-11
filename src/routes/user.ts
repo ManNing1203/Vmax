@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { PoolClient } from "pg";
 import pool from "../db";
 import { snakeToCamel } from '../utils/variableFormat';
+import { JWT_SECRET } from '../config';
 
 const route = express.Router();
 // {
@@ -68,7 +69,7 @@ route.post("/login", async (req, res) => {
         // create token
         const token = jwt.sign(
             { email: user.email, userId: user.user_id, totalIncome: user.total_income,totalGoal: user.total_goal },
-            "secretkey");
+            JWT_SECRET);
             
         res.json({
             success: true,

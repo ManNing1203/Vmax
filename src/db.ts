@@ -1,5 +1,9 @@
 import { Pool } from 'pg';
 require('dotenv').config()
+
+// PG_SSL=false for a local PostgreSQL; leave unset/true for cloud databases (e.g. AWS RDS).
+const useSsl = (process.env.PG_SSL ?? 'true').toLowerCase() !== 'false';
+
 const pool = new Pool({
   user: process.env.PG_USER,
   password: String(process.env.PG_PASSWORD),
@@ -8,21 +12,6 @@ const pool = new Pool({
   database: process.env.PG_DATABASE,
   connectionTimeoutMillis: 10000,
   idleTimeoutMillis: 30000,
-    ssl: {
-    rejectUnauthorized: false, // important for many cloud providers
-  },
+  ssl: useSsl ? { rejectUnauthorized: false } : false,
 });
 export default pool
-// const pool = new Pool({
-//   user: "REMOVED",
-//   password: "REMOVED",
-//   host: "db-x-ump.cg3qay8kcu4s.us-east-1.rds.amazonaws.com",
-//   port: 5432,
-//   database:"REMOVED",
-//   connectionTimeoutMillis: 10000,
-//   idleTimeoutMillis: 30000,
-//   ssl: {
-//     rejectUnauthorized: false, // important for many cloud providers
-//   },
-// });
-
