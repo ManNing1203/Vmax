@@ -39,3 +39,11 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# generated launch videos (/brag)
+brag-output/
+brag-output-*/
+
+# env backups
+.env.*
+!.env.example

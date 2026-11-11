@@ -1,43 +1,47 @@
 # Vmax - React Native Frontend
 Vmax is an Expo (React Native) mobile app.
 
-## Prerequisites
-Install these tools first:
-- Node.js
-- npm (comes with Node.js)
-- Expo Go app on your mobile device (optional, you can run with emulator)
+Track daily spending in Ringgit, set savings goals, and let Vmax split what you can save each day across them.
 
-## 1. Install dependencies
-From the project root, run:
+The app needs the **Vmax backend** ([vmax-server](https://github.com/john90921/vmax-server)) and a PostgreSQL database. Set the backend up first by following its README.
+
+## Prerequisites
+- Node.js 20+
+- PostgreSQL (for the backend)
+- One of: an Android emulator (Android Studio), the Expo Go app on your phone, or a web browser
+
+## 1. Start the backend
+In the `vmax-server` folder (see its README for first-time setup):
+```bash
+npm install
+npm run db:seed   # first time only: creates tables + demo account
+npm run dev       # API on http://localhost:3000
+```
+Demo login: `demo@vmax.app` / `VmaxDemo2026`
+
+## 2. Install and configure the app
 ```bash
 npm install
 ```
+Copy `.env.example` to `.env` and set `EXPO_PUBLIC_BACKEND_API_URL`:
 
-## 2. Configure environment variables
-This app uses `EXPO_PUBLIC_BACKEND_API_URL` in `services/api.js` for API requests.
-Create a `.env` file in the project root with:
-```env
-EXPO_PUBLIC_BACKEND_API_URL=http://YOUR_BACKEND_URL
-```
-After changing `.env`, restart Expo.
+| Where the app runs | URL |
+|---|---|
+| Android emulator | `http://10.0.2.2:3000` |
+| Phone with Expo Go (same Wi-Fi) | `http://<your computer's LAN IP>:3000` |
+| Web / iOS simulator | `http://localhost:3000` |
+
+Restart Expo after changing `.env`.
 
 ## 3. Run the app
-Start Expo:
 ```bash
 npx expo start
 ```
-Then choose one of these:
-- Press `a` to open Android
-- Press `i` to open iOS (macOS only)
-- Press `w` to open web
-- Scan the QR code with Expo Go on your phone
+Then press `a` for Android, `w` for web, or scan the QR code with Expo Go.
 
-You can also run directly:
-```bash
-npm run android
-npm run ios
-npm run web
-```
+**Troubleshooting**
+- *Login spins or fails:* make sure the backend is running and the URL in `.env` matches the table above.
+- *`npm run dev` says it can't find `package.json`:* run it inside the `vmax-server` folder, not `htdocs`.
 
 ## AI Tools
 The following AI tools are integrated or used in this project:
