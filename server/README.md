@@ -1,6 +1,8 @@
-# Vmax Server
+# Vmax: server
 
-Express + TypeScript API for the [Vmax](https://github.com/LucasLim5234/Vmax) savings app, backed by PostgreSQL.
+Part of the Vmax monorepo. For the quickest start, follow the [main README](../README.md); `npm run dev` at the repo root runs this API and the app together.
+
+Express + TypeScript API for the Vmax app in [`mobile/`](../mobile), backed by PostgreSQL.
 
 ## Requirements
 - Node.js 20+

@@ -1,0 +1,13 @@
+{
+  "name": "vmax",
+  "private": true,
+  "description": "Vmax: track daily spending in Ringgit and grow your savings goals. Expo app + Express/PostgreSQL API.",
+  "scripts": {
+    "setup": "npm install --prefix server && npm install --prefix mobile",
+    "db:setup": "npm run db:setup --prefix server",
+    "db:seed": "npm run db:seed --prefix server",
+    "dev": "node scripts/dev.js",
+    "server": "npm run dev --prefix server",
+    "mobile": "npm start --prefix mobile"
+  }
+}
